@@ -1,6 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import LogoDisplaySrc from "./asset/display-logo.png";
-import LogoAegeanSrc from "./asset/aegean-logo.png";
 
 import './App.css';
 
@@ -34,7 +32,7 @@ function App() {
     const btn_save = useRef<any>(null)
 
     let context: CanvasRenderingContext2D | null;
-    const [elapsed, setTime] = useState(0);
+    const [, setTime] = useState(0);
     let counter = 0;
     let animationFrame: number;
     let start: number;
@@ -45,6 +43,8 @@ function App() {
     }
     const positionMouseDown: Array<PositionMouseDownType> = []
 
+    const [bufferArray, setBufferArray] = useState<Map<string, ImageData>>(new Map<string ,ImageData>());
+    
     function loop() {
         animationFrame = requestAnimationFrame(onFrame);
         context?.drawImage(video.current!, 0, 0, 500, 500);
@@ -61,19 +61,37 @@ function App() {
     }
 
     let Logo: HTMLImageElement;
-    // logoAegeanImg.current!.addEventListener("click", () => {
-    //     Logo.src = logoAegeanImg.current!.src;
-    // })
+
+    function getImageBuffer(source: string, context: CanvasRenderingContext2D){
+        const image = document.createElement('img')
+        image.src = source;
+        image.onload = function(){
+            context.drawImage(image, 0, 0)
+            const buffer = context.getImageData(0,0, image.width, image.height);
+            setBufferArray([...bufferArray, buffer])
+        }
+    }
+
     useEffect(() => {
         init();
 
-        Logo = document.createElement("img");
+        const canvasBuffer = document.createElement('canvas');
+        const contextBuffer = canvasBuffer.getContext('2d');
+        
+        const logoDisplaySrc = "./asset/display-logo.png";
+        const logoAegeanSrc = "./asset/aegean-logo.png";
+        
+        getImageBuffer(logoDisplaySrc, context!);
+        
+        
         logoAegeanImg.current!.addEventListener("click", () => {
-            Logo.src = logoAegeanImg.current!.src;
-        })
+            
+        });
+        
         logoDisplayImg.current!.addEventListener("click", () => {
-            Logo.src = logoDisplayImg.current!.src;
-        })
+           
+        });
+        
         // Logo.src = "display-logo.png";
         context = canvas.current!.getContext('2d')
         canvas.current!.height = CANVAS_HEIGHT;
