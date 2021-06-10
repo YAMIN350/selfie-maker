@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import logoDisplaySrcImg from "./asset/display-logo.png";
-import logoAegeanSrcImg from "./asset/aegean-logo.png";
+
 import './App.css';
+
+type BufferMap = Map<string, ImageData>;
 
 function App() {
     let stream: MediaStream;
@@ -44,9 +45,8 @@ function App() {
     }
     const positionMouseDown: Array<PositionMouseDownType> = []
 
-    // const [bufferArray, setBufferArray] = useState<Map<string, ImageData>>(new Map<string ,ImageData>());
-    const [bufferArray, setBufferArray] = useState<any>(new Map<string ,ImageData>());
-
+    const [bufferMap, setBufferMap] = useState<BufferMap>(new Map<string ,ImageData>());
+    
     function loop() {
         animationFrame = requestAnimationFrame(onFrame);
         context?.drawImage(video.current!, 0, 0, 500, 500);
@@ -70,7 +70,8 @@ function App() {
         image.onload = function(){
             context.drawImage(image, 0, 0)
             const buffer = context.getImageData(0,0, image.width, image.height);
-            setBufferArray([...bufferArray, buffer])
+            bufferMap.set(source, buffer)
+            setBufferMap(bufferMap)
         }
     }
 
@@ -80,14 +81,11 @@ function App() {
         const canvasBuffer = document.createElement('canvas');
         const contextBuffer = canvasBuffer.getContext('2d');
         
-        const logoDisplaySrc = "./asset/display-logo.png";
-        const logoAegeanSrc = "./asset/aegean-logo.png";
-        
-
+        const logoDisplaySrc = "./display-logo.png";
+        const logoAegeanSrc = "./aegean-logo.png";
         
         logoAegeanImg.current!.addEventListener("click", () => {
             getImageBuffer(logoAegeanSrc, contextBuffer!);
-            // Logo.src = logoDisplayImg
         });
         
         logoDisplayImg.current!.addEventListener("click", () => {
@@ -115,8 +113,8 @@ function App() {
     return (
         <div className="App">
             <div className="all-tampons">
-                <img ref={logoAegeanImg} className="logo" src={logoAegeanSrcImg}/>
-                <img ref={logoDisplayImg} className="logo" src={logoDisplaySrcImg}/>
+                <img ref={logoAegeanImg} className="logo" src="aegean-logo.png"/>
+                <img ref={logoDisplayImg} className="logo" src="display-logo.png"/>
             </div>
             <video id="video" style={{display: "none"}} ref={video} playsInline autoPlay/>
             <div className="test">
