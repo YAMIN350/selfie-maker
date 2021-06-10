@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-
+import logoDisplaySrcImg from "./asset/display-logo.png";
+import logoAegeanSrcImg from "./asset/aegean-logo.png";
 import './App.css';
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
     const btn_save = useRef<any>(null)
 
     let context: CanvasRenderingContext2D | null;
-    const [, setTime] = useState(0);
+    const [time, setTime] = useState(0);
     let counter = 0;
     let animationFrame: number;
     let start: number;
@@ -43,8 +44,9 @@ function App() {
     }
     const positionMouseDown: Array<PositionMouseDownType> = []
 
-    const [bufferArray, setBufferArray] = useState<Map<string, ImageData>>(new Map<string ,ImageData>());
-    
+    // const [bufferArray, setBufferArray] = useState<Map<string, ImageData>>(new Map<string ,ImageData>());
+    const [bufferArray, setBufferArray] = useState<any>(new Map<string ,ImageData>());
+
     function loop() {
         animationFrame = requestAnimationFrame(onFrame);
         context?.drawImage(video.current!, 0, 0, 500, 500);
@@ -81,25 +83,26 @@ function App() {
         const logoDisplaySrc = "./asset/display-logo.png";
         const logoAegeanSrc = "./asset/aegean-logo.png";
         
-        getImageBuffer(logoDisplaySrc, context!);
-        
+
         
         logoAegeanImg.current!.addEventListener("click", () => {
-            
+            getImageBuffer(logoAegeanSrc, contextBuffer!);
+            // Logo.src = logoDisplayImg
         });
         
         logoDisplayImg.current!.addEventListener("click", () => {
-           
+            getImageBuffer(logoDisplaySrc, context!);
+
         });
-        
-        // Logo.src = "display-logo.png";
+
         context = canvas.current!.getContext('2d')
         canvas.current!.height = CANVAS_HEIGHT;
         canvas.current!.width = CANVAS_WIDTH;
         canvas.current!.addEventListener("mousedown", (e) => {
-            positionMouseDown.push({x: e.offsetX, y: e.offsetY, image: Logo})
+            console.log(bufferArray, "OKOKO")
+            positionMouseDown.push({x: e.offsetX, y: e.offsetY, image: bufferArray.image})
+            console.log(positionMouseDown[0].image, "position aray")
         })
-
         loop()
     }, []);
 
@@ -112,11 +115,10 @@ function App() {
     return (
         <div className="App">
             <div className="all-tampons">
-                <img ref={logoAegeanImg} className="logo" src={LogoAegeanSrc}/>
-                <img ref={logoDisplayImg} className="logo" src={LogoDisplaySrc}/>
+                <img ref={logoAegeanImg} className="logo" src={logoAegeanSrcImg}/>
+                <img ref={logoDisplayImg} className="logo" src={logoDisplaySrcImg}/>
             </div>
             <video id="video" style={{display: "none"}} ref={video} playsInline autoPlay/>
-            {/*<button onClick={saveImage}>SAVE IMAGE</button>*/}
             <div className="test">
                 <a href="#" onClick={saveImage} ref={btn_save} className="button-save"/>
                 <canvas ref={canvas}/>
