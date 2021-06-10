@@ -1,3 +1,39 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
+  display: grid;
+  /*justify-content: space-around;*/
+  grid-gap: 20px;
+  /*flex-wrap: wrap;*/
+  /*margin: auto;*/
+}
+.all-tampons {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  justify-content: center;
+  grid-gap: 20px;
+}
+.logo {
+  width: 150px;
+}
+.test {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.button-save {
+  background: red;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  z-index: 1;
+  position: absolute;
+  top: 520px;
+  left: 20%;
+  border: 2px solid white;
+}
+
+.image-saving {
+  /*position: absolute;*/
+  /*right: 0;*/
+  /*top:0;*/
 }
