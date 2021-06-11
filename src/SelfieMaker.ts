@@ -3,8 +3,13 @@ type PositionMouseDownType = {
     y: number;
     stampBuffer?: CanvasImageSource;
 }
-    
-export class SelfieMakfer{
+
+type DeviceCompleteInformation ={
+    devicesInfo :Array<MediaDeviceInfo>,
+    constraints : MediaTrackSupportedConstraints,
+}
+ 
+export class SelfieMaker{
     stream: MediaStream | undefined;
     positionMouseDown: Array<PositionMouseDownType> = []
     context: CanvasRenderingContext2D;
@@ -18,7 +23,16 @@ export class SelfieMakfer{
         this.context = context;
         this.loop();
     }
-    
+    async getCameras(): Promise< DeviceCompleteInformation | undefined>{
+        try{
+            const devicesInfo = await navigator.mediaDevices.enumerateDevices();
+            const constraints = navigator.mediaDevices.getSupportedConstraints();
+            
+            return {devicesInfo, constraints};
+        } catch (e){
+            
+        }
+    }
     async initCamera() {
         const contrain = {
             audio: false,
