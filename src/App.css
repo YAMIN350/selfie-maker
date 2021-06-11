@@ -5,6 +5,8 @@
   grid-gap: 20px;
   /*flex-wrap: wrap;*/
   /*margin: auto;*/
+  background-color: bisque;
+  height: 100vh;
 }
 .all-tampons {
   display: grid;
@@ -12,9 +14,7 @@
   justify-content: center;
   grid-gap: 20px;
 }
-.logo {
-  width: 150px;
-}
+
 .test {
   display: flex;
   justify-content: space-around;
